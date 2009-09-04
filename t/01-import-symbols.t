@@ -4,7 +4,7 @@ package Testify;
 use v5.10.0;
 use strict;
 
-use Export::Proxy qw( foo );
+use Exporter::Proxy qw( foo );
 
 use Test::More;
 

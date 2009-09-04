@@ -4,7 +4,7 @@ package Base;
 use v5.10.0;
 use strict;
 
-use Export::Proxy qw( dispatch=frobnicate );
+use Exporter::Proxy qw( dispatch=frobnicate );
 
 sub foo { [ @_, 'FOO' ] }
 sub bar { [ @_, 'BAR' ] }

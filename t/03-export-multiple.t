@@ -4,7 +4,7 @@ package Base;
 use v5.10.0;
 use strict;
 
-use Export::Proxy qw( foo bar );
+use Exporter::Proxy qw( foo bar );
 
 sub foo {}
 sub bar {}

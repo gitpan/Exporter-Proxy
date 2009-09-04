@@ -162,7 +162,7 @@ optional dispatcher.
 
     package My::Module;
 
-    use Export::Proxy qw( foo Bar );
+    use Exporter::Proxy qw( foo Bar );
 
     # at this point users of My::Module will get
     # *My::Module::foo and *My::Module::Bar 
@@ -210,7 +210,7 @@ optional dispatcher.
     # than to pollute the caller's namespace with 
     # all of the available methods.
 
-    use Export::Proxy qw( dispatch=frobnicate );
+    use Exporter::Proxy qw( dispatch=frobnicate );
 
     # at this point 'frobnicate' is installed in 
     # My::Module. it splices out the second
@@ -347,7 +347,7 @@ For example:
 
     package Query::Services;
 
-    use Export::Proxy qw( dispatch=query );
+    use Exporter::Proxy qw( dispatch=query );
 
     sub lookup
     {
@@ -395,7 +395,7 @@ calls available.
 
     package My::Query::Handle;
 
-    use Export::Proxy 
+    use Exporter::Proxy 
     qw
     (
         connect
@@ -411,7 +411,7 @@ calls available.
 
     package My::Query::Lookup
 
-    use Export::Proxy
+    use Exporter::Proxy
     qw
     (
         lookup
@@ -422,7 +422,7 @@ calls available.
 
     package My::Query::Modify
 
-    use Export::Proxy
+    use Exporter::Proxy
     qw
     (
         insert
@@ -438,7 +438,7 @@ calls available.
 
     package My::Query;
 
-    use Export::Proxy qw( dispatch=query );
+    use Exporter::Proxy qw( dispatch=query );
 
     use My::Query::Handle;
     use My::Query::Lookup;

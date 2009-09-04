@@ -7,8 +7,8 @@ use Test::More;
 plan tests => 2;
 
 
-use_ok 'Export::Proxy';
+use_ok 'Exporter::Proxy';
 
-ok Export::Proxy->can( 'import' ), "Export::Proxy can 'import'";
+ok Exporter::Proxy->can( 'import' ), "Exporter::Proxy can 'import'";
 
 __END__
