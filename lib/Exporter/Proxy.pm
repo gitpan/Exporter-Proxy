@@ -15,7 +15,7 @@ use Symbol  qw( qualify_to_ref );
 # package variables
 ########################################################################
 
-our $VERSION    = '0.01';
+our $VERSION    = '0.03';
 
 ########################################################################
 # utility functions
@@ -155,8 +155,7 @@ __END__
 
 =head1 NAME
 
-Exporter::Proxy - Simplified symbol export by name with
-optional dispatcher.
+Exporter::Proxy - Simplified symbol export & proxy dispatch.
 
 =head1 SYNOPSIS
 
@@ -210,9 +209,9 @@ optional dispatcher.
     # than to pollute the caller's namespace with 
     # all of the available methods.
 
-    use Exporter::Proxy qw( dispatch=frobnicate );
+    use Exporter::Proxy qw( dispatch=do_something );
 
-    # at this point 'frobnicate' is installed in 
+    # at this point 'do_something' is installed in 
     # My::Module. it splices out the second
     # argument, uses My::Module->can( $name ) to
     # check if the module has the service availble
@@ -228,13 +227,13 @@ optional dispatcher.
 
     my $object  = My::Module->construct;
 
-    $object->frobnicate( foo => @foo_args );
+    $object->do_something( foo => @foo_args );
 
     my @test_these  = $object->exports;
 
     my $test_ref    = $objeect->exports;
 
-    # @test_these will be qw( frobnicate )
+    # @test_these will be qw( do_something )
     # $test_ref will be an arrayref of a 
     # copy of the exported values (i.e., 
     # modifying $test_ref does not affect
