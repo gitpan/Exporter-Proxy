@@ -1,5 +1,5 @@
 
-use v5.10.0;
+use v5.8;
 use strict;
 
 use Test::More;
@@ -7,7 +7,7 @@ use Test::More;
 plan tests => 2;
 
 
-use_ok 'Exporter::Proxy';
+require_ok 'Exporter::Proxy';
 
 ok Exporter::Proxy->can( 'import' ), "Exporter::Proxy can 'import'";
 

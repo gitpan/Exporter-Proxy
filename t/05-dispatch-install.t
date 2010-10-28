@@ -1,7 +1,7 @@
 
 package Base;
 
-use v5.10.0;
+use v5.8;
 use strict;
 
 use Exporter::Proxy qw( dispatch=frobnicate bim bam );
@@ -14,7 +14,7 @@ our @bam    = (  1  ..  9  );
 
 package Derived;
 
-use v5.10.0;
+use v5.8;
 use strict;
 
 use Test::More;

@@ -1,7 +1,7 @@
 
 package Base;
 
-use v5.10.0;
+use v5.8;
 use strict;
 
 use Exporter::Proxy qw( foo );
@@ -14,7 +14,7 @@ our $foo = 'this is a scalar';
 
 package Derived;
 
-use v5.10.0;
+use v5.8;
 use strict;
 
 use Test::More;

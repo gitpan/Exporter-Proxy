@@ -4,18 +4,21 @@
 
 package Exporter::Proxy;
 
-use v5.10.0;
+use v5.8;
 use strict;
 
 use Carp;
 
-use Symbol  qw( qualify_to_ref );
+use List::Util  qw( first );
+use Symbol      qw( qualify_to_ref );
 
 ########################################################################
 # package variables
 ########################################################################
 
-our $VERSION    = '0.03';
+our $VERSION    = '0.04';
+
+my $disp_list   = 'DISPATCH_OK';
 
 ########################################################################
 # utility functions
@@ -33,16 +36,9 @@ sub import
 
     shift;
 
-    my @exportz = ();
+    my @exportz = grep { ! /=/ } @_;
 
-    my %argz
-    = do
-    {
-        my @argz    = grep /=/, @_;
-        @exportz    = grep { ! ( $_ ~~ @argz ) } @_;
-        
-        map { split /=/ } @argz
-    };
+    my %argz    = map { /=/ ? ( split /=/ ) : () } @_;
 
     # maybe carp about extraneous arguments here?
 
@@ -58,23 +54,56 @@ sub import
 
     if( $disp )
     {
-        $disp ~~ @exportz 
+        my $list    = qualify_to_ref $disp_list, $source;
+
+        first { $disp eq $_ } @exportz
+#        $disp ~~ @exportz 
         or push @exportz, $disp;
 
-        my $ref = qualify_to_ref $disp, $source;
-
-        undef &{ *$ref };
-
-        *$ref
-        = sub
+        unless( $source->can( $disp ) )
         {
-            my $op      = splice @_, 1, 1;
+            my $sub = qualify_to_ref $disp, $source;
+            my $can = qualify_to_ref $disp_list, $source;
 
-            my $handler = $source->can( $op )
-            or croak "Bogus $disp: $source cannot '$op'";
+            if( my $sanity = *{ $can }{ ARRAY } )
+            {
+                *$sub
+                = sub
+                {
+                    my $op      = splice @_, 1, 1;
 
-            goto &$handler
-        };
+                    first { $op ~~ $_ } @$sanity
+#                    $op ~~ @$sanity
+                    or do
+                    {
+                        local $"    = ' ';
+
+                        confess "Bogus $disp: '$op' not in @$sanity"
+                    };
+
+                    # this could happen if someone plays with
+                    # the symbol table after installing the sub.
+
+                    my $handler = $source->can( $op )
+                    or croak "Bogus $disp: $source cannot '$op'";
+
+                    goto &$handler
+                };
+            }
+            else
+            {
+                *$sub
+                = sub
+                {
+                    my $op      = splice @_, 1, 1;
+
+                    my $handler = $source->can( $op )
+                    or croak "Bogus $disp: $source cannot '$op'";
+
+                    goto &$handler
+                };
+            }
+        }
     }
 
     @exportz
@@ -109,7 +138,8 @@ sub import
         # empty list => use @exportz.
         # :noexport  => use empty list.
 
-        if( ':noexport' ~~ @_ )
+        if( first { ':noexport' eq $_ } @_ )
+#        if( ':noexport' ~~ @_ )
         {
             @_  = ();
         }
@@ -125,27 +155,48 @@ sub import
         # resolve these at runtime to account for
         # possible autoloading, etc.
 
-        for( @_ )
+        for my $name ( @_ )
         {
-            index $_, ':'
+            index $name, ':'
             or next;
 
-            if( $_ ~~ @exportz )
+            if( first { $name eq $_ } @exportz )
+#            if( $name ~~ @exportz )
             {
-                my $source  = qualify_to_ref $_, $source;
-                my $install = qualify_to_ref $_, $caller;
+                my $source  = qualify_to_ref $name, $source;
+                my $install = qualify_to_ref $name, $caller;
 
                 *$install   = *$source;
             }
             else
             {
-                die "Bogus $source: '$_' not exported";
+                die "Bogus $source: '$name' not exported";
             }
         }
     };
 
     return
 }
+
+########################################################################
+# install the sub name in a list of subs that can be dispatched.
+
+##use Attribute::Handlers;
+##
+##sub UNIVERSAL::dispatchable : ATTR(CODE)
+##{
+##    my ( $pkg, $symbol, $wrapped, $name ) = @_;
+##
+##    my $list    = qualify_to_ref $disp_list, $pkg;
+##
+##    *{ $list }{ ARRAY } or *$list = [];
+##
+##    push @{ *$list }, $name;
+##
+##    *$symbol    = $wrapped;
+##
+##    return
+##}
 
 # keep require happy
 

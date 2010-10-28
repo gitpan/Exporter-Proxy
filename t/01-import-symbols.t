@@ -1,7 +1,7 @@
 
 package Testify;
 
-use v5.10.0;
+use v5.8;
 use strict;
 
 use Exporter::Proxy qw( foo );
