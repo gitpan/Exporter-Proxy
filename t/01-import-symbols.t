@@ -1,4 +1,12 @@
 
+use Test::More;
+
+BEGIN
+{
+    eval { use v5.10; 1 }
+    or plan skip_all => 'This test uses smart matches';
+}
+
 package Testify;
 
 use v5.8;

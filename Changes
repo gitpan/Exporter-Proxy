@@ -1,3 +1,10 @@
+
+Thu Nov  4 22:44:43 CDT 2010
+
+- 0.05  clean up tests for 5.8 -- the module can handle it,
+        code will be cleaner once I shift it to 5.10.
+
+
 Thu Aug 27 12:32:36 EDT 2009
 
 - initial release

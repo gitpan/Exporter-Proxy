@@ -16,7 +16,7 @@ use Symbol      qw( qualify_to_ref );
 # package variables
 ########################################################################
 
-our $VERSION    = '0.04';
+our $VERSION    = '0.05';
 
 my $disp_list   = 'DISPATCH_OK';
 
@@ -72,8 +72,7 @@ sub import
                 {
                     my $op      = splice @_, 1, 1;
 
-                    first { $op ~~ $_ } @$sanity
-#                    $op ~~ @$sanity
+                    first { $op eq $_ } @$sanity
                     or do
                     {
                         local $"    = ' ';
@@ -241,7 +240,8 @@ Exporter::Proxy - Simplified symbol export & proxy dispatch.
     # subroutine, Bar as an array, or foo may 
     # be overloaded with &foo, %foo, @foo, $foo.
 
-    $value ~~ @Bar
+    first { $value eq $_ } @Bar
+#    $value ~~ @Bar
     or croak "Invalid '$value'";
 
     delete $foo{ somekey }
