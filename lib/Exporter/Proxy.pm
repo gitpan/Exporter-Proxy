@@ -16,7 +16,7 @@ use Symbol      qw( qualify_to_ref );
 # package variables
 ########################################################################
 
-our $VERSION    = '0.05';
+our $VERSION    = '0.06';
 
 my $disp_list   = 'DISPATCH_OK';
 

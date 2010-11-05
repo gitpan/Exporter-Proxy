@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Exporter-Proxy
-version:            0.05
+version:            0.06
 abstract:           Simplified symbol export & proxy dispatch.
 author:  []
 license:            unknown

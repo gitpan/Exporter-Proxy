@@ -3,8 +3,8 @@ use Test::More;
 
 BEGIN
 {
-    eval { use v5.10; 1 }
-    or plan skip_all => 'This test uses smart matches';
+    plan skip_all => "This test requires 5.10 (found $])"
+    if $] < 5.10;
 }
 
 package Testify;
